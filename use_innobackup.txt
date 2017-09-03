@@ -1,0 +1,14 @@
+优点：
+	无须停止数据库进行innodb热备
+	增量备份mysql
+	
+全备：innobackupex --defaults-file=/data/mysqld/mysql3307/tmp/my.cnf --socket=/data/mysqld/mysql3307/data/mysql3307.sock --usr=root --password=rootroot /data/mysqld/backup/
+增备： innobackupex --defaults-file=/data/mysqld/mysql3307/tmp/my.cnf --socket=/data/mysqld/mysql3307/data/mysql3307.sock --usr=root --password=rootroot --incremental /data/mysqld/backup --incremental-basedir=/data/mysqld/backup/${d_full}
+apple：--redo-only 只前滚，不回滚
+innobackupex --apply-log --redo-only /data/mysqld/backup/2017-05-18_15-57-45/
+
+最后一次得到一致性备份        去掉  --redo-only选项
+ innobackupex --apply-log  /data/mysqld/backup/2017-05-18_15-57-45/ --incremental-dir=/data/mysqld/backup/2017-05-18_16-06-24/
+
+恢复：
+innobackupex --copy-back --defaults-file=/data/mysqld/mysql3306/tmp/my.cnf  /data/mysqld/backup/2017-05-18_15-57-45/
